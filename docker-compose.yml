@@ -2,7 +2,7 @@ version: "3.9"
 services:
   postgres:
     image: postgres:latest
-    container_name: postgres_cidade_monitor
+    container_name: postgres_cidade_monitor_backend
     hostname: postgres
     ports:
       - 5432:5432
@@ -16,7 +16,7 @@ services:
 
   pgadmin:
     image: dpage/pgadmin4
-    container_name: pgadmin_cidade_monitor
+    container_name: pgadmin_cidade_monitor_backend
     depends_on:
       - postgres
     ports:
@@ -33,7 +33,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: prisma-postgres-api_cidade_monitor
+    container_name: prisma-postgres-api_cidade_monitor_backend
     depends_on:
       - postgres
     ports:
