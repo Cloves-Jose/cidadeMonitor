@@ -1,8 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
 generator client {
-  provider = "prisma-client-js"
+  provider   = "prisma-client-js"
   engineType = "binary"
 }
 
@@ -10,3 +7,93 @@ datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
+
+model tb_genero {
+  id String @id @default(uuid())
+  title String 
+  tb_cliente tb_cliente []
+}
+
+model tb_nivel_ameaca {
+  id String @id @default(uuid())
+  title String
+  tb_ameaca tb_ameaca []
+}
+
+model tb_permissao {
+  id String @id @default(uuid())
+  title String
+  tb_agente tb_agente []
+}
+
+model tb_agente {
+  id String @id @default(uuid())
+  name String
+  email String
+  password String
+  permission String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime? 
+  tb_permissao tb_permissao @relation(fields: [permission], references: [id])
+  tb_ameaca tb_ameaca[]
+  tb_categoria tb_categoria[]
+}
+
+model tb_categoria {
+  id String @id @default(uuid())
+  agente_id String 
+  title String 
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
+  tb_ameaca tb_ameaca[]
+  tb_agente tb_agente @relation(fields: [agente_id], references: [id])
+}
+
+model tb_ameaca {
+  id String @id @default(uuid())
+  agent_id String 
+  title String
+  image String?
+  categoria_id String
+  nivel_ameaca_id String
+  description String?
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
+  tb_agente tb_agente @relation(fields: [agent_id], references: [id])
+  tb_categoria tb_categoria @relation(fields: [categoria_id], references: [id])
+  tb_nivel_ameaca tb_nivel_ameaca @relation(fields: [nivel_ameaca_id], references: [id])
+  tb_chamado tb_chamado []
+}
+
+model tb_cliente {
+  id String @id @default(uuid())
+  name String
+  email String
+  gender String
+  date_birth DateTime?
+  password String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
+  tb_chamado tb_chamado []
+  tb_genero tb_genero @relation(fields: [gender], references: [id])
+}
+
+model tb_chamado {
+  id String @id @default(uuid())
+  descricao String
+  image String
+  ameaca_id String
+  cliente_id String
+  longitude String
+  latitude String
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+  deleted_at DateTime?
+  tb_ameaca tb_ameaca @relation(fields: [ameaca_id], references: [id])
+  tb_cliente tb_cliente @relation(fields: [cliente_id], references: [id])
+}
+
