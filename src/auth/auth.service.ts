@@ -21,7 +21,7 @@ export class AuthService {
     }
 
     async singIn(email: string, pass: string): Promise<any> {
-        const agent = await this.agentService.findOne(email);
+        const agent = await this.agentService.findOneByEmail(email);
 
         const isMatch = await bcrypt.compare(pass, agent.password)
 
