@@ -10,7 +10,7 @@ export class AgenteService {
 
     constructor(private readonly prisma: PrismaService) {}
 
-    async findOne(email: string) {
+    async findOneByEmail(email: string) {
         try {
             return await this.prisma.tb_agente.findFirst({
                 where: {
@@ -31,6 +31,27 @@ export class AgenteService {
         } catch(error) {
             console.log("Erro ao buscar por agente: ", error);
             throw new Error("Erro ao buscar por agente");
+        }
+    }
+
+    async findOneById(id: string) {
+        try {
+            return await this.prisma.tb_agente.findUnique({
+                where: {
+                    id: id,
+                    deleted_at: null
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    permission: true,
+                    created_at: true,
+                    updated_at: true,
+                    deleted_at: true
+                }
+            })
+        } catch (error) {
+
         }
     }
 
